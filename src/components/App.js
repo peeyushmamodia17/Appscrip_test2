@@ -207,11 +207,71 @@ return string;
   handlenavbar=()=>{
       console.log(document.getElementById("search").value);
       let date=document.getElementById("search").value;
-      let {states,fetchdata,getStates,keys,confirmed,searchdate}=this.state;
+      let {states,fetchdata,getStates,keys,confirmed,searchdate,tested1,confirmed1,Recovered1}=this.state;
       this.setState({
         searchdate : date
       })
-    
+       tested1.splice(0,tested1.length);
+      confirmed1.splice(0,confirmed1.length);
+      Recovered1.splice(0,Recovered1.length);
+      console.log(tested1);
+      console.log("hii");
+      let data1=0;
+      let data2=0;
+      let data3=0;
+      let arr1=[];
+      let arr2=[];
+      let arr3=[];
+      fetchdata.states_daily.map((data)=>{
+          let date1=this.formatdate(data.date);
+          if(date1==date){
+              tested1=[];
+              confirmed1=[];
+              Recovered1=[];
+              if(data.status=="Confirmed"){
+                
+                  getStates.map((state1)=>{
+                    confirmed1.push(data[state1]);
+                    arr1=this.getunique(confirmed1);
+                     data1=data1+parseInt(data[state1]);
+                     console.log(data1);
+                  })
+              }
+              if(data.status=="Recovered"){
+
+                getStates.map((state1)=>{
+                  Recovered1.push(data[state1]);
+                  arr2=this.getunique(Recovered1);
+                  console.log(arr2);
+                  Recovered1.push(data[state1]);
+                   data2=data2+parseInt(data[state1]);
+                   console.log(data2);
+                })
+              }
+
+              if(data.status=="Deceased"){
+
+                getStates.map((state1)=>{
+                  tested1.push(data[state1]);
+                  arr3=this.getunique(tested1);
+                  tested1.push(data[state1]);
+                   data3=data3+parseInt(data[state1]);
+                   console.log(data3);
+                })
+              }
+          }
+         
+        
+      })
+      this.setState({
+        tested:data3,
+        confirmed:data1,
+        Recovered:data2,
+        tested1:arr3,
+        confirmed1:arr1,
+        Recovered1:arr2,
+      })
+      
      
   }
 
